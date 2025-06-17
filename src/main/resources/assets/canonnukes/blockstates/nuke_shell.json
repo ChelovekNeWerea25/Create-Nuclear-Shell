@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "canonnukes:block/nuke_shell",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "canonnukes:block/nuke_shell",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "canonnukes:block/nuke_shell",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "canonnukes:block/nuke_shell",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "canonnukes:block/nuke_shell"
+    },
+    "facing=west": {
+      "model": "canonnukes:block/nuke_shell",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

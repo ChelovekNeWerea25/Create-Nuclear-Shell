@@ -1,0 +1,9 @@
+{
+  "block.canonnukes.nuke_shell": "Ядерный снаряд",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "Высвобождает мощный ядерный взрыв, уничтожая ближайшую область в огне и заражая окружающую среду радиацией.",
+  "block.createnukecannon.nuke_shell.tooltip.condition2": "При детонации",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cДля §cдетонации §c§l_необходим_ §cзапал§c — §cбез §cнего §cон §c§l_НЕ_ §cвзорвется §cсамостоятельно.",
+  "block.createnukecannon.nuke_shell.tooltip.condition1": "§cВажно",
+  "block.createnukecannon.nuke_shell.tooltip.summary": "\"Теперь, Я стану _Смертью_, разрушителем миров\"",
+  "entity.canonnukes.nuke_shell": "Ядерный снаряд"
+}
