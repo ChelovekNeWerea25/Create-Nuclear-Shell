@@ -1,0 +1,9 @@
+{
+  "block.canonnukes.nuke_shell": "核炮弹",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "释放强大的核爆，在火海中摧毁周围区域并使环境受到辐射污染。",
+  "block.createnukecannon.nuke_shell.tooltip.condition2": "爆炸时",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§c引爆§c必须§c依赖§c§l_引信_§c——§c它§c§l无法§c自行爆炸。",
+  "block.createnukecannon.nuke_shell.tooltip.condition1": "§c重要提示",
+  "block.createnukecannon.nuke_shell.tooltip.summary": "\"现在，我成为了_死神_，世界的毁灭者。\"",
+  "entity.canonnukes.nuke_shell": "核炮弹"
+}
