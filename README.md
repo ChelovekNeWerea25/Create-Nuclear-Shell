@@ -88,7 +88,8 @@ We welcome community translations! Here's how to contribute:
 **A:** I don't know when I want to.
 
 **Q:** *How to craft a bomb in the third version of the mod?*  
-**A:** It's simple ![Craft](MdAssets/craft.png)
+**A:** It's simple 
+![Craft](MdAssets/craft.png)
 
 ---
 
