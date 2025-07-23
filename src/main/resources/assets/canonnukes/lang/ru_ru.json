@@ -5,5 +5,21 @@
   "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cДля §cдетонации §c§l_необходим_ §cзапал§c — §cбез §cнего §cон §c§l_НЕ_ §cвзорвется §cсамостоятельно.",
   "block.createnukecannon.nuke_shell.tooltip.condition1": "§cВажно",
   "block.createnukecannon.nuke_shell.tooltip.summary": "\"Теперь, Я стану _Смертью_, разрушителем миров\"",
-  "entity.canonnukes.nuke_shell": "Ядерный снаряд"
+  "entity.canonnukes.nuke_shell": "Ядерный снаряд",
+
+  "advancements.canonnukes.nuke_shell.title": "Холодная война",
+  "advancements.canonnukes.nuke_shell.desc": "Можем повторить?",
+
+  "canonnukes.ponder.reactor.header": "Постройка реактора",
+  "canonnukes.ponder.reactor.text_1": "Постройте стальной каркас для опоры",
+  "canonnukes.ponder.reactor.text_2": "Вставьте внутренние блоки реактора",
+  "canonnukes.ponder.reactor.text_3": "Контроллер: управляет всей структурой",
+  "canonnukes.ponder.reactor.text_4": "Вход: сюда вставляется уран",
+  "canonnukes.ponder.reactor.text_5": "Выход вращения",
+  "canonnukes.ponder.reactor.text_6": "Выход: выдаёт переработанное топливо",
+  "canonnukes.ponder.reactor.text_7": "Закройте верх реактора",
+  "canonnukes.ponder.reactor.text_8": "Реактор готов! Подключите валы Create.",
+  "canonnukes.ponder.reactor.text_9": "Структура успешно собрана!"
+
+
 }

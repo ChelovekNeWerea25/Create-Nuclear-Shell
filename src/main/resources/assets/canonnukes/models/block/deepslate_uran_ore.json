@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "canonnukes:block/deepslate_uran_ore"
+  }
+}

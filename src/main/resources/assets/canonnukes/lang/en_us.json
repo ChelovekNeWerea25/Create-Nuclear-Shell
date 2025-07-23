@@ -5,5 +5,23 @@
   "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cA §cfuse §cis §c§l_required_ §cfor §cdetonation - §cit will §c§l_NOT_ §cexplode §con §cits §cown.",
   "block.createnukecannon.nuke_shell.tooltip.condition1": "§cImportant",
   "block.createnukecannon.nuke_shell.tooltip.summary": "\"Now, I am become _Death_, the destroyer of worlds.\"",
-  "entity.canonnukes.nuke_shell": "Nuclear Shell"
+  "entity.canonnukes.nuke_shell": "Nuclear Shell",
+
+  "advancements.canonnukes.getting_started.title": "Why did I press that?",
+  "advancements.canonnukes.getting_started.desc": "You knew what it does. Probably.",
+  "advancements.canonnukes.nuke_shell.title": "Ah shit, here we go again",
+  "advancements.canonnukes.nuke_shell.desc": "World War 3?",
+
+  "canonnukes.ponder.reactor.header": "Reactor Construction",
+  "canonnukes.ponder.reactor.text_1": "Build a steel frame for support",
+  "canonnukes.ponder.reactor.text_2": "Insert internal blocks for the reactor core",
+  "canonnukes.ponder.reactor.text_3": "Controller: manages the whole structure",
+  "canonnukes.ponder.reactor.text_4": "Input port: insert uranium here",
+  "canonnukes.ponder.reactor.text_5": "Rotation output port",
+  "canonnukes.ponder.reactor.text_6": "Output port: exports processed fuel",
+  "canonnukes.ponder.reactor.text_7": "Seal the structure with a top layer",
+  "canonnukes.ponder.reactor.text_8": "Reactor is ready! Connect Create shafts.",
+  "canonnukes.ponder.reactor.text_9": "Structure successfully assembled!"
+
+
 }

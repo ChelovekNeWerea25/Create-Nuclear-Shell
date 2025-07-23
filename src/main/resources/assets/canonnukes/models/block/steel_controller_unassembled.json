@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "canonnukes:block/steel_block",
+    "down": "canonnukes:block/steel_block",
+    "up": "canonnukes:block/steel_block",
+    "north": "canonnukes:block/steel_controller",
+    "south": "canonnukes:block/steel_block",
+    "west": "canonnukes:block/steel_block",
+    "east": "canonnukes:block/steel_block"
+  }
+}

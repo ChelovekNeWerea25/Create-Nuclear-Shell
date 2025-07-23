@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": { "model": "canonnukes:block/steel_input" },
+    "facing=east": {
+      "model": "canonnukes:block/steel_input",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "canonnukes:block/steel_input",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "canonnukes:block/steel_input",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

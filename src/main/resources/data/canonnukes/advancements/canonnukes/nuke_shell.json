@@ -1,0 +1,33 @@
+{
+  "parent": "canonnukes:canonnukes/root",
+  "display": {
+    "icon": {
+      "item": "canonnukes:nuke_shell"
+    },
+    "title": {
+      "translate": "advancements.canonnukes.nuke_shell.title"
+    },
+    "description": {
+      "translate": "advancements.canonnukes.nuke_shell.desc"
+    },
+    "background": "minecraft:textures/block/stripped_bamboo_block.png",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "main": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "canonnukes:nuke_shell"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": []
+}

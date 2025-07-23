@@ -1,0 +1,27 @@
+{
+  "block.canonnukes.nuke_shell": "核炮弹",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "释放强大的核爆，在火海中摧毁周围区域并使环境受到辐射污染。",
+  "block.createnukecannon.nuke_shell.tooltip.condition2": "爆炸时",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§c引爆§c必须§c依赖§c§l_引信_§c——§c它§c§l无法§c自行爆炸。",
+  "block.createnukecannon.nuke_shell.tooltip.condition1": "§c重要提示",
+  "block.createnukecannon.nuke_shell.tooltip.summary": "\"现在，我成为了_死神_，世界的毁灭者。\"",
+  "entity.canonnukes.nuke_shell": "核炮弹",
+
+  "advancements.canonnukes.getting_started.title": "我干嘛要按这个？",
+  "advancements.canonnukes.getting_started.desc": "你大概知道后果吧。大概。",
+  "advancements.canonnukes.nuke_shell.title": "为了中华之荣耀！",
+  "advancements.canonnukes.nuke_shell.desc": "愿中华永远伟大！",
+
+  "canonnukes.ponder.reactor.header": "反应堆建造",
+  "canonnukes.ponder.reactor.text_1": "建造钢架支撑结构",
+  "canonnukes.ponder.reactor.text_2": "放置反应堆核心内部结构",
+  "canonnukes.ponder.reactor.text_3": "控制器：管理整个结构",
+  "canonnukes.ponder.reactor.text_4": "输入端口：在此放入铀",
+  "canonnukes.ponder.reactor.text_5": "旋转输出端口",
+  "canonnukes.ponder.reactor.text_6": "输出端口：输出处理后的燃料",
+  "canonnukes.ponder.reactor.text_7": "用顶部结构封闭反应堆",
+  "canonnukes.ponder.reactor.text_8": "反应堆就绪！连接 Create 的旋转轴。",
+  "canonnukes.ponder.reactor.text_9": "结构成功组装完成！"
+
+
+}

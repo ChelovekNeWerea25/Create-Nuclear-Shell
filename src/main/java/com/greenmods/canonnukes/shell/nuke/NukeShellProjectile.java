@@ -1,12 +1,13 @@
-package com.greenmods.canonnukes;
+package com.greenmods.canonnukes.shell.nuke;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
-import com.github.alexmodguy.alexscaves.server.block.SirenLightBlock;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.NuclearSirenBlockEntity;
 import com.github.alexmodguy.alexscaves.server.block.poi.ACPOIRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.google.common.base.Predicates;
+import com.greenmods.canonnukes.CanonNukes;
+import com.greenmods.canonnukes.shell.ModShells;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
@@ -56,7 +57,7 @@ public class NukeShellProjectile extends FuzedBigCannonProjectile {
 
     @Override
     public BlockState getRenderedBlockState() {
-        return CanonNukes.NUKE_SHELL.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
+        return ModShells.NUKE_SHELL.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
     }
 
     @Nonnull

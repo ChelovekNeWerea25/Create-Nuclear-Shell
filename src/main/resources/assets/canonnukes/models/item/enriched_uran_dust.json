@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "canonnukes:item/enriched_uran_dust"
+  }
+}

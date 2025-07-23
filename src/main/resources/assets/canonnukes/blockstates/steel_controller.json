@@ -1,0 +1,39 @@
+{
+  "variants": {
+    "facing=north,assembled=false": { "model": "canonnukes:block/steel_controller_unassembled" },
+    "facing=north,assembled=true":  { "model": "canonnukes:block/steel_controller_assembled" },
+
+    "facing=east,assembled=false": {
+      "model": "canonnukes:block/steel_controller_unassembled",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,assembled=true": {
+      "model": "canonnukes:block/steel_controller_assembled",
+      "y": 90,
+      "uvlock": true
+    },
+
+    "facing=south,assembled=false": {
+      "model": "canonnukes:block/steel_controller_unassembled",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,assembled=true": {
+      "model": "canonnukes:block/steel_controller_assembled",
+      "y": 180,
+      "uvlock": true
+    },
+
+    "facing=west,assembled=false": {
+      "model": "canonnukes:block/steel_controller_unassembled",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,assembled=true": {
+      "model": "canonnukes:block/steel_controller_assembled",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

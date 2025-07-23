@@ -5,5 +5,22 @@
   "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cДля §cдетонації §c§lпотрібен §cзапал§c — §cбез §cнього §cвін §c§l_НЕ_ §cвибухне §cсамостійно.",
   "block.createnukecannon.nuke_shell.tooltip.condition1": "§cВажливо",
   "block.createnukecannon.nuke_shell.tooltip.summary": "\"Тепер, Я став _Смертю_, руйнівником світів\"",
-  "entity.canonnukes.nuke_shell": "Ядерний снаряд"
+  "entity.canonnukes.nuke_shell": "Ядерний снаряд",
+
+  "advancements.canonnukes.getting_started.title": "І навіщо я це натиснув?",
+  "advancements.canonnukes.getting_started.desc": "Ти ж знав, що буде. Можливо.",
+  "advancements.canonnukes.nuke_shell.title": "Гра в кінець",
+  "advancements.canonnukes.nuke_shell.desc": "Повертаємо своє?",
+
+  "canonnukes.ponder.reactor.header": "Будівництво реактора",
+  "canonnukes.ponder.reactor.text_1": "Побудуйте сталевий каркас для основи",
+  "canonnukes.ponder.reactor.text_2": "Вставте внутрішні блоки реактора",
+  "canonnukes.ponder.reactor.text_3": "Контролер: керує всією структурою",
+  "canonnukes.ponder.reactor.text_4": "Вхід: вставте уран сюди",
+  "canonnukes.ponder.reactor.text_5": "Вихід обертання",
+  "canonnukes.ponder.reactor.text_6": "Вихід: видає оброблене паливо",
+  "canonnukes.ponder.reactor.text_7": "Закрийте верхню частину реактора",
+  "canonnukes.ponder.reactor.text_8": "Реактор готовий! Підключіть вали Create.",
+  "canonnukes.ponder.reactor.text_9": "Структуру успішно зібрано!"
+
 }

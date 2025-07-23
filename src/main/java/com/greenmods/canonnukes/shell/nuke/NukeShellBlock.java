@@ -1,5 +1,7 @@
-package com.greenmods.canonnukes;
+package com.greenmods.canonnukes.shell.nuke;
 
+import com.greenmods.canonnukes.CanonNukes;
+import com.greenmods.canonnukes.shell.ModShells;
 import net.minecraft.world.entity.EntityType;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 import rbasamoyai.createbigcannons.munitions.big_cannon.SimpleShellBlock;
@@ -15,6 +17,6 @@ public class NukeShellBlock extends SimpleShellBlock<NukeShellProjectile> {
 
     @Override
     public EntityType<? extends NukeShellProjectile> getAssociatedEntityType() {
-        return CanonNukes.NUKE_SHELL_PROJECTILE.get();
+        return ModShells.NUKE_SHELL_PROJECTILE.get();
     }
 }

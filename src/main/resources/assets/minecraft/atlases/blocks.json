@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "canonnukes:fluid/uranium_flow"
+    },
+    {
+      "type": "single",
+      "resource": "canonnukes:fluid/uranium_still"
+    }
+  ]
+}
