@@ -89,6 +89,7 @@ We welcome community translations! Here's how to contribute:
 
 **Q:** *How to craft a bomb in the third version of the mod?*  
 **A:** It's simple 
+
 ![Craft](MdAssets/craft.png)
 
 ---
