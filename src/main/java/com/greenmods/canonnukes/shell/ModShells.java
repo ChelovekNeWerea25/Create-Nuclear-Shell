@@ -3,11 +3,13 @@ package com.greenmods.canonnukes.shell;
 import com.greenmods.canonnukes.CanonNukes;
 import com.greenmods.canonnukes.shell.nuke.NukeShellBlock;
 import com.greenmods.canonnukes.shell.nuke.NukeShellProjectile;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.EntityEntry;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.client.renderer.RenderType;
@@ -88,6 +90,11 @@ public class ModShells {
                 .updateVelocity(false)
                 .trackingRange(16));
     }
+    public static final ItemEntry<SequencedAssemblyItem> INCOMPLETE_NUKE_SHELL = REGISTRATE
+            .item("incomplete_nuke_shell", SequencedAssemblyItem::new)
+            .model((c, p) -> p.withExistingParent(c.getName(), p.modLoc("block/nuke_shell")))
+            .lang("Incomplete Nuclear Shell")
+            .register();
     public static void register() {
     }
 }

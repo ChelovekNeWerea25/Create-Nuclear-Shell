@@ -1,0 +1,26 @@
+{
+  "block.canonnukes.nuke_shell": "Nukleargeschoss",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "Löst eine gewaltige Nuklearexplosion aus, die das unmittelbare Gebiet in ein Inferno verwandelt und die Umgebung verstrahlt.",
+  "block.createnukecannon.nuke_shell.tooltip.condition2": "Bei Detonation",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cEin §cZünder §cist §c§l_ERFORDERLICH_ - §cdas §cGeschoss §cexplodiert §c§l_NICHT_ §cvon §cselbst.",
+  "block.createnukecannon.nuke_shell.tooltip.condition1": "§cWichtig",
+  "block.createnukecannon.nuke_shell.tooltip.summary": "„Jetzt bin ich zum _Tod_ geworden, der Zerstörer der Welten.“",
+  "entity.canonnukes.nuke_shell": "Nukleargeschoss",
+  "item.canonnukes.incomplete_nuke_shell": "Unvollständiges Nukleargeschoss",
+
+  "advancements.canonnukes.getting_started.title": "Warum habe ich das gedrückt?",
+  "advancements.canonnukes.getting_started.desc": "Du wusstest, was passieren würde. Wahrscheinlich.",
+  "advancements.canonnukes.nuke_shell.title": "Ach Scheiße, nicht schon wieder",
+  "advancements.canonnukes.nuke_shell.desc": "Weltkrieg 3?",
+
+  "canonnukes.ponder.reactor.header": "Reaktorkonstruktion",
+  "canonnukes.ponder.reactor.text_1": "Baue einen Stahlrahmen zur Stabilisierung",
+  "canonnukes.ponder.reactor.text_2": "Platziere die Blöcke für den Reaktorkern im Inneren",
+  "canonnukes.ponder.reactor.text_3": "Steuerung: Verwaltet die gesamte Struktur",
+  "canonnukes.ponder.reactor.text_4": "Eingang: Führe hier Uran zu",
+  "canonnukes.ponder.reactor.text_5": "Rotationsausgang",
+  "canonnukes.ponder.reactor.text_6": "Ausgang: Exportiert verbrauchten Brennstoff",
+  "canonnukes.ponder.reactor.text_7": "Versiegele die Struktur mit einer oberen Schicht",
+  "canonnukes.ponder.reactor.text_8": "Reaktor bereit! Schließe Create-Wellen an.",
+  "canonnukes.ponder.reactor.text_9": "Struktur erfolgreich zusammengebaut!"
+}

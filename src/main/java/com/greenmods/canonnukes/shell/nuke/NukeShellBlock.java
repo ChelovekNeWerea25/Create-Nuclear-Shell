@@ -1,6 +1,5 @@
 package com.greenmods.canonnukes.shell.nuke;
 
-import com.greenmods.canonnukes.CanonNukes;
 import com.greenmods.canonnukes.shell.ModShells;
 import net.minecraft.world.entity.EntityType;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;

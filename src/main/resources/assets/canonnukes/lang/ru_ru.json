@@ -1,25 +1,26 @@
 {
   "block.canonnukes.nuke_shell": "Ядерный снаряд",
-  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "Высвобождает мощный ядерный взрыв, уничтожая ближайшую область в огне и заражая окружающую среду радиацией.",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour2": "Вызывает мощный ядерный взрыв, испепеляя всё в эпицентре и заражая радиацией всё вокруг.",
   "block.createnukecannon.nuke_shell.tooltip.condition2": "При детонации",
-  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cДля §cдетонации §c§l_необходим_ §cзапал§c — §cбез §cнего §cон §c§l_НЕ_ §cвзорвется §cсамостоятельно.",
+  "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cДля §cвзрыва §c§l_ТРЕБУЕТСЯ_ §cвзрыватель — §cсам §cпо §cсебе §cон §c§l_НЕ_ §cдетонирует.",
   "block.createnukecannon.nuke_shell.tooltip.condition1": "§cВажно",
-  "block.createnukecannon.nuke_shell.tooltip.summary": "\"Теперь, Я стану _Смертью_, разрушителем миров\"",
+  "block.createnukecannon.nuke_shell.tooltip.summary": "«Я стал _Смертью_, разрушителем миров.»",
   "entity.canonnukes.nuke_shell": "Ядерный снаряд",
+  "item.canonnukes.incomplete_nuke_shell": "Незавершённый ядерный снаряд",
 
-  "advancements.canonnukes.nuke_shell.title": "Холодная война",
-  "advancements.canonnukes.nuke_shell.desc": "Можем повторить?",
+  "advancements.canonnukes.getting_started.title": "Зачем я нажал эту кнопку?",
+  "advancements.canonnukes.getting_started.desc": "Ты ведь знал, к чему это приведет. Наверное.",
+  "advancements.canonnukes.nuke_shell.title": "3.6 рентген — не отлично, но и не ужасно",
+  "advancements.canonnukes.nuke_shell.desc": "Третья мировая уже началась?",
 
   "canonnukes.ponder.reactor.header": "Постройка реактора",
-  "canonnukes.ponder.reactor.text_1": "Постройте стальной каркас для опоры",
-  "canonnukes.ponder.reactor.text_2": "Вставьте внутренние блоки реактора",
+  "canonnukes.ponder.reactor.text_1": "Постройте стальную раму для каркаса",
+  "canonnukes.ponder.reactor.text_2": "Заполните внутреннюю часть блоками ядра",
   "canonnukes.ponder.reactor.text_3": "Контроллер: управляет всей структурой",
-  "canonnukes.ponder.reactor.text_4": "Вход: сюда вставляется уран",
-  "canonnukes.ponder.reactor.text_5": "Выход вращения",
-  "canonnukes.ponder.reactor.text_6": "Выход: выдаёт переработанное топливо",
-  "canonnukes.ponder.reactor.text_7": "Закройте верх реактора",
-  "canonnukes.ponder.reactor.text_8": "Реактор готов! Подключите валы Create.",
+  "canonnukes.ponder.reactor.text_4": "Входной шлюз: сюда загружается уран",
+  "canonnukes.ponder.reactor.text_5": "Шлюз вывода вращения",
+  "canonnukes.ponder.reactor.text_6": "Выходной шлюз: отсюда забирается отработанное топливо",
+  "canonnukes.ponder.reactor.text_7": "Накройте структуру верхним слоем для герметичности",
+  "canonnukes.ponder.reactor.text_8": "Реактор готов! Подключите валы из Create.",
   "canonnukes.ponder.reactor.text_9": "Структура успешно собрана!"
-
-
 }

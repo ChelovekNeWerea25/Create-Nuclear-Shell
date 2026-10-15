@@ -6,6 +6,7 @@
   "block.createnukecannon.nuke_shell.tooltip.condition1": "§cImportant",
   "block.createnukecannon.nuke_shell.tooltip.summary": "\"Now, I am become _Death_, the destroyer of worlds.\"",
   "entity.canonnukes.nuke_shell": "Nuclear Shell",
+  "item.canonnukes.incomplete_nuke_shell": "Incomplete Nuclear Shell",
 
   "advancements.canonnukes.getting_started.title": "Why did I press that?",
   "advancements.canonnukes.getting_started.desc": "You knew what it does. Probably.",

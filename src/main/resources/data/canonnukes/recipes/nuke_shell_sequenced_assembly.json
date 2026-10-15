@@ -1,0 +1,74 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:sturdy_sheet"
+  },
+  "transitionalItem": {
+    "item": "canonnukes:incomplete_nuke_shell"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "canonnukes:incomplete_nuke_shell" },
+        { "item": "minecraft:tnt" }
+      ],
+      "results": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ],
+      "results": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "canonnukes:incomplete_nuke_shell" },
+        { "item": "create:precision_mechanism" }
+      ],
+      "results": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "canonnukes:incomplete_nuke_shell" },
+        { "item": "create:brass_sheet" }
+      ],
+      "results": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ],
+      "results": [
+        { "item": "canonnukes:incomplete_nuke_shell" }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "canonnukes:nuke_shell",
+      "chance": 85.0
+    },
+    {
+      "item": "create:precision_mechanism",
+      "chance": 10.0
+    },
+    {
+      "item": "create:crushed_raw_iron",
+      "chance": 5.0
+    }
+  ],
+  "loops": 4
+}

@@ -1,9 +1,5 @@
-// ClientSetup.java
 package com.greenmods.canonnukes.client;
 
-import com.greenmods.canonnukes.block.entity.ModBlockEntities;
-import com.greenmods.canonnukes.block.nuke.NuclearBombRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;

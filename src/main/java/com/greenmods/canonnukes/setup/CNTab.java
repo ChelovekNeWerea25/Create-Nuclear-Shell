@@ -19,7 +19,6 @@ public class CNTab {
             .icon( ()-> new ItemStack( ModItems.NUKE_ICON.get() ) )
             .displayItems((itemDisplayParameters, output) ->{
                 output.accept(ModShells.NUKE_SHELL.get());
-                output.accept(ModBlock.STEEL_BLOCK.get());
             } )
             .build());
     public static void register(IEventBus eventBus) {

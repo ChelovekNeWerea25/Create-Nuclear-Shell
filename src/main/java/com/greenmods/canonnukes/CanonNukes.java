@@ -3,10 +3,9 @@ package com.greenmods.canonnukes;
 import com.greenmods.canonnukes.block.ModBlock;
 import com.greenmods.canonnukes.block.entity.ModBlockEntities;
 
-import com.greenmods.canonnukes.event.UraniumEventHandler;
-import com.greenmods.canonnukes.fluid.CNFluids;
+
+import com.greenmods.canonnukes.commands.NukeCommand;
 import com.greenmods.canonnukes.item.ModItems;
-import com.greenmods.canonnukes.setup.CNPonders;
 import com.greenmods.canonnukes.setup.CNTab;
 import com.greenmods.canonnukes.shell.ModShells;
 import com.mojang.logging.LogUtils;
@@ -15,16 +14,13 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 
-import com.tterrag.registrate.Registrate;
 import net.createmod.catnip.lang.FontHelper;
 
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,8 +32,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 import rbasamoyai.createbigcannons.ModGroup;
-
-import java.util.concurrent.CompletableFuture;
 
 @Mod(CanonNukes.MODID)
 public class CanonNukes
@@ -69,10 +63,8 @@ public class CanonNukes
         ModBlockEntities.register();
         ModShells.register();
         ModItems.register();
-        CNFluids.register();
 
         modEventBus.addListener(this::addCreative);
-        forgeEventBus.addListener(UraniumEventHandler::handleFluidEffect);
         REGISTRATE.registerEventListeners(modEventBus);
     }
 
@@ -94,6 +86,10 @@ public class CanonNukes
 
         LOGGER.info("server starting init");
     }
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        NukeCommand.register(event.getDispatcher());
+    }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
@@ -101,7 +97,6 @@ public class CanonNukes
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            PonderIndex.addPlugin( new CNPonders() );
             LOGGER.info("HELLO FROM CLIENT SETUP");
         }
     }
