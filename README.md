@@ -127,7 +127,7 @@ We welcome community translations! Here's how to contribute:
 
 ## 📦 Download
 
-### v3.0.0 (only nuclear shell)
+### v3.0.0 1.20.1 (only nuclear shell)
 [![Download on Modrinth](https://img.shields.io/badge/Download-Modrinth-brightgreen?logo=modrinth&logoColor=white)](https://modrinth.com/mod/create-nuclear-shell/version/3.0.0)  
 [![Download on CurseForge](https://img.shields.io/badge/Download-CurseForge-orange?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/create-nuclear-shell/files/6660771)
 
