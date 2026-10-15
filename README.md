@@ -1,9 +1,43 @@
-# ☢️ Create: Nuclear Shell
+# ☢️ Create: Nuclear Shell [ARCHIVED]
 
 ![Mod Logo](MdAssets/modlogo.png)
 
-> *"Now I am become Death, the destroyer of worlds."*  
+> *"Now I am become Death, the destroyer of worlds."*
 > ― J. Robert Oppenheimer
+
+---
+
+## 🛣️ ROAD MAP & PROJECT STATUS
+
+> **⚠️ Notice:**  
+> **Create: Nuclear Shell** is transitioning to **ARCHIVED** status.
+
+### 🔄 Final Updates
+Before support is discontinued, a few final minor versions will be released to polish the current content:
+
+| Status | Feature | Description |
+| :---: | :--- | :--- |
+| 🟡 | **Final Polish** | Minor bug fixes and performance adjustments for the current build. |
+| 🟡 | **Minor Version Releases** | Final patch updates to fix critical issues and improve compatibility. |
+| ❌ | **Multiple Warhead Types** | Canceled for this mod (Tactical nukes, dirty bombs, etc.). |
+| ❌ | **Configurable Yield** | Canceled for this mod (Adjust explosion power via config). |
+| ❌ | **New Crafting Chains** | Canceled for this mod (Uranium processing, bomb assembly). |
+| ❌ | **Independence** | Canceled for this mod (Removal of Alex's Caves dependency). |
+
+---
+
+### 🛑 End of Support
+Following the final minor releases, active development and support for **Create: Nuclear Shell** will **cease completely**:
+- No further bug fixes or patches.
+- No ports to newer Minecraft versions.
+- No new features will be added.
+
+---
+
+### 🚀 Successor Project
+All planned features, major overhauls, and future updates are being moved to a **new standalone successor project** built on **NeoForge** without the **Alex's Caves** dependency.
+
+> 🔗 **Check out the new project:** *[SOON]*
 
 ---
 
@@ -19,7 +53,7 @@
 |------------------|-----------------------------------|
 | **MC Version**   | 1.20.1                            |
 | **Dependencies** | Create: Big Cannons, Alex's Caves |
-| **License**      | *MIT*                             |
+| **License**      | MIT                               |
 
 ---
 
@@ -30,15 +64,6 @@
 - 💣 Nuclear artillery shell with massive explosion radius
 - ☢️ Radiation zones that persist after detonation
 - 🌋 Secondary firestorms and environmental damage
-
-### 🛠️ Planned Features
-
-| Status | Feature                | Description                          |
-|--------|------------------------|--------------------------------------|
-| ❌     | Multiple Warhead Types | Tactical nukes, dirty bombs, etc.    |
-| ❌     | Configurable Yield     | Adjust explosion power via config    |
-| ❌     | New Crafting Chains    | Uranium processing, bomb assembly    |
-| ❌     | Independence           | Complete rejection of Alex's Caves      |
 
 ---
 
@@ -84,22 +109,20 @@ We welcome community translations! Here's how to contribute:
 
 ## ❓ FAQ
 
-**Q:** *When will the developer add answers here??*  
-**A:** I don't know when I want to.
+- **Q:** *When will the developer add answers here?*  
+  **A:** I don't know when I want to.
 
-**Q:** *How to craft a bomb in the third version of the mod?*  
-**A:** It's simple 
-
-![Craft](MdAssets/craft.png)
+- **Q:** *How to craft a bomb in the third version of the mod?*  
+  **A:** It's simple  
+  ![Craft](MdAssets/craft.png)
 
 ---
 
 ## 📦 Download
 
-## v3.0.0 (only nuclear shell)
+### v3.0.0 (only nuclear shell)
 [![Download on Modrinth](https://img.shields.io/badge/Download-Modrinth-brightgreen?logo=modrinth&logoColor=white)](https://modrinth.com/mod/create-nuclear-shell/version/3.0.0)  
 [![Download on CurseForge](https://img.shields.io/badge/Download-CurseForge-orange?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/create-nuclear-shell/files/6660771)
-
 
 ---
 
