@@ -100,7 +100,14 @@ We welcome community translations! Here's how to contribute:
 
 ## 📜 Changelog
 
-### v3.0.0 *(Current)*
+### v3.1.0 *(Target for Porting)*
+
+- 🔗 **Removed Alex's Caves dependency** — the mod is now standalone relative to Alex's Caves.
+- 🛠️ Changed crafting recipe for the nuclear shell.
+- 💥 Reworked detonation mechanics and explosion type.
+- 📌 **Note:** Version 3.1.0 will serve as the base for future porting!
+
+### v3.0.0
 
 - Initial release
 - Basic nuclear shell functionality
