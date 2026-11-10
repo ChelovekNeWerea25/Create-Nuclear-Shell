@@ -3,8 +3,7 @@ package com.greenmods.canonnukes.world.explosion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
+import com.greenmods.canonnukes.Config;
 import com.greenmods.canonnukes.util.TickScheduler;
 
 import net.minecraft.core.BlockPos;
@@ -28,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import org.jetbrains.annotations.Nullable;
+
 public class NukeExplosion extends Explosion {
 
     /**
@@ -39,16 +40,13 @@ public class NukeExplosion extends Explosion {
     /** Upper limit for the radius in which entities are damaged. */
     public static final float MAX_EFFECT_RADIUS = 160F;
 
-    /** Ticks between two steps of the progressive block removal. */
-    private static final int REMOVAL_STEP_INTERVAL = 2;
-
-    /** Amount of steps the block removal is spread over. */
-    private static final int REMOVAL_STEPS = 40;
-
     private final Level level;
-    private final double x, y, z;
+    private final double x;
+    private final double y;
+    private final double z;
     private final float radius;
     private final boolean fire;
+    private final DamageSource damageSource;
 
     private final List<BlockPos> sortedBlocks = new ArrayList<>();
 
@@ -60,13 +58,36 @@ public class NukeExplosion extends Explosion {
                          float radius,
                          boolean fire,
                          BlockInteraction blockInteraction) {
-        super(level, source, damageSource, damageCalculator, x, y, z, radius, fire, blockInteraction);
+        super(level,
+                source,
+                damageSource,
+                damageCalculator,
+                x, y, z,
+                radius,
+                fire,
+                blockInteraction,
+                ParticleTypes.EXPLOSION,
+                ParticleTypes.EXPLOSION_EMITTER,
+                SoundEvents.GENERIC_EXPLODE);
+
         this.level = level;
         this.x = x;
         this.y = y;
         this.z = z;
         this.radius = radius;
         this.fire = fire;
+        this.damageSource = damageSource != null
+                ? damageSource
+                : Explosion.getDefaultDamageSource(level, source);
+    }
+
+    public NukeExplosion(Level level,
+                         @Nullable Entity source,
+                         double x, double y, double z,
+                         float radius,
+                         boolean fire,
+                         BlockInteraction blockInteraction) {
+        this(level, source, null, null, x, y, z, radius, fire, blockInteraction);
     }
 
     @Override
@@ -80,7 +101,7 @@ public class NukeExplosion extends Explosion {
      * can be dug from the centre outwards.
      */
     private void collectDestroyedBlocks() {
-        if (!this.interactsWithBlocks()) {
+        if (!this.interactsWithBlocks() || !Config.DESTROY_BLOCKS.get()) {
             return;
         }
 
@@ -155,12 +176,13 @@ public class NukeExplosion extends Explosion {
                 this.x + effectRadius, this.y + effectRadius, this.z + effectRadius
         );
 
-        List<Entity> entities = this.level.getEntities(this.getIndirectSourceEntity(), box);
+        List<Entity> entities = this.level.getEntities(this.getDirectSourceEntity(), box);
         Vec3 centerVec = new Vec3(this.x, this.y, this.z);
-        DamageSource damageSource = this.getDamageSource();
+        double damageMultiplier = Config.DAMAGE_MULTIPLIER.get();
+        int radiationDuration = Config.RADIATION.get() ? Config.RADIATION_DURATION.get() : 0;
 
         for (Entity entity : entities) {
-            if (entity.ignoreExplosion()) continue;
+            if (entity.ignoreExplosion(this)) continue;
 
             double distSq = entity.distanceToSqr(centerVec);
             if (distSq > effectRadiusSq) continue;
@@ -174,11 +196,15 @@ public class NukeExplosion extends Explosion {
 
             double factor = Math.max(0.0, 1.0 - (dist / effectRadius));
 
-            float damage = (float) (factor * factor * 180.0F + 25.0F);
-            entity.hurt(damageSource, damage);
+            float damage = (float) ((factor * factor * 180.0F + 25.0F) * damageMultiplier);
+            entity.hurt(this.damageSource, damage);
 
             double pushForce = factor * 6.8D;
-            Vec3 impulse = new Vec3(dirX * pushForce, (dirY * pushForce) + 1.2D, dirZ * pushForce);
+            Vec3 impulse = new Vec3(
+                    dirX * pushForce,
+                    (dirY * pushForce) + 1.2D,
+                    dirZ * pushForce
+            );
             entity.setDeltaMovement(entity.getDeltaMovement().add(impulse));
 
             if (entity instanceof Player player) {
@@ -187,15 +213,15 @@ public class NukeExplosion extends Explosion {
                 }
             }
 
-            if (entity instanceof LivingEntity living) {
-                living.addEffect(new MobEffectInstance(MobEffects.WITHER, 800, 5));
-                living.addEffect(new MobEffectInstance(MobEffects.POISON, 400, 2));
-                living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 300, 0));
-                living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 3));
-                living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 250, 1));
+            if (entity instanceof LivingEntity living && radiationDuration > 0) {
+                living.addEffect(new MobEffectInstance(MobEffects.WITHER, radiationDuration, 5));
+                living.addEffect(new MobEffectInstance(MobEffects.POISON, radiationDuration / 2, 2));
+                living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, radiationDuration * 3 / 8, 0));
+                living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, radiationDuration / 2, 3));
+                living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, radiationDuration * 5 / 16, 1));
 
                 if (this.fire) {
-                    living.setSecondsOnFire((int) (factor * 20 + 5));
+                    living.setRemainingFireTicks((int) (factor * 20 + 5) * 20);
                 }
             }
         }
@@ -206,19 +232,31 @@ public class NukeExplosion extends Explosion {
         if (!(this.level instanceof ServerLevel serverLevel)) return;
 
         serverLevel.playSound(null, this.x, this.y, this.z,
-                SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 18.0F, 0.42F);
+                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 18.0F, 0.42F);
         serverLevel.playSound(null, this.x, this.y, this.z,
-                SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 13.0F, 0.7F);
+                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 13.0F, 0.7F);
         serverLevel.playSound(null, this.x, this.y, this.z,
                 SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 15.0F, 0.32F);
         serverLevel.playSound(null, this.x, this.y, this.z,
                 SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 9.0F, 0.38F);
 
-        spawnMushroomCloud(serverLevel);
+        if (Config.MUSHROOM_CLOUD.get()) {
+            spawnMushroomCloud(serverLevel);
+        }
 
         progressiveBlockRemoval(serverLevel);
 
+        if (Config.SCREEN_SHAKE.get()) {
+            shakeScreen(serverLevel);
+        }
+    }
+
+    /**
+     * Shakes the screen of every player that is close enough to the blast.
+     */
+    private void shakeScreen(ServerLevel serverLevel) {
         float shakeRadius = this.radius * 4.5F;
+
         for (ServerPlayer player : serverLevel.players()) {
             double distSq = player.distanceToSqr(this.x, this.y, this.z);
             if (distSq >= shakeRadius * shakeRadius) continue;
@@ -251,13 +289,16 @@ public class NukeExplosion extends Explosion {
     private void progressiveBlockRemoval(ServerLevel level) {
         if (sortedBlocks.isEmpty()) return;
 
-        int total = sortedBlocks.size();
-        int perStep = Math.max(40, total / REMOVAL_STEPS);
+        int steps = Math.max(1, Config.CRATER_STEPS.get());
+        int stepInterval = Math.max(1, Config.CRATER_STEP_INTERVAL.get());
 
-        for (int step = 0; step < REMOVAL_STEPS; step++) {
+        int total = sortedBlocks.size();
+        int perStep = Math.max(40, total / steps);
+
+        for (int step = 0; step < steps; step++) {
             final int currentStep = step;
 
-            TickScheduler.schedule(level.getServer(), currentStep * REMOVAL_STEP_INTERVAL, () -> {
+            TickScheduler.schedule(level.getServer(), currentStep * stepInterval, () -> {
                 int start = currentStep * perStep;
                 int end = Math.min(start + perStep, total);
 
@@ -286,7 +327,8 @@ public class NukeExplosion extends Explosion {
         final double fireballR  = Math.max(7, r * 1.0);
 
         level.sendParticles(ParticleTypes.FLASH, cx, cy + 1.8, cz, 12, 0, 0, 0, 0);
-        level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, cx, cy + 2.5, cz, 22, fireballR * 0.6, fireballR * 0.4, fireballR * 0.6, 0);
+        level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, cx, cy + 2.5, cz,
+                22, fireballR * 0.6, fireballR * 0.4, fireballR * 0.6, 0);
 
         level.sendParticles(ParticleTypes.FLAME, cx, cy + 2.2, cz,
                 (int) (450 + r * 30), fireballR, fireballR * 0.75, fireballR, 0.42);

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.server.MinecraftServer;
+
+import org.slf4j.Logger;
 
 /**
  * Simple server side scheduler.
@@ -31,7 +31,7 @@ public final class TickScheduler {
      * Schedules a task to be run on the server thread after the given amount of ticks.
      *
      * @param server     the server the task belongs to
-     * @param delayTicks amount of ticks to wait, {@code 0} runs the task on the next tick
+     * @param delayTicks amount of ticks to wait, {@code 1} runs the task on the next tick
      * @param task       the task to run
      */
     public static void schedule(MinecraftServer server, int delayTicks, Runnable task) {

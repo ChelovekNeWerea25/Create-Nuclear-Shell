@@ -2,23 +2,19 @@ package com.greenmods.canonnukes.util;
 
 import com.greenmods.canonnukes.CanonNukes;
 
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-@Mod.EventBusSubscriber(modid = CanonNukes.MODID)
+@EventBusSubscriber(modid = CanonNukes.MODID)
 public class TickHandler {
 
     private TickHandler() {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-
+    public static void onServerTick(ServerTickEvent.Post event) {
         TickScheduler.runPendingTasks(event.getServer());
     }
 

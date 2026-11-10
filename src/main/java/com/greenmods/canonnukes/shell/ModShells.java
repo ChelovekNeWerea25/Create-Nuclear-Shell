@@ -17,6 +17,7 @@ import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -37,6 +38,7 @@ import java.util.function.Consumer;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 
 public class ModShells {
+
     private static final CreateRegistrate REGISTRATE = CanonNukes.REGISTRATE;
 
     public static final BlockEntry<NukeShellBlock> NUKE_SHELL = REGISTRATE
@@ -50,6 +52,9 @@ public class ModShells {
             .item(FuzedProjectileBlockItem::new)
             .transform(CBCBuilderTransformers.fuzedProjectileItem("projectile/nuke_shell"))
             .tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+            // The shell is added to the creative tab of this mod by the tab itself, registering it
+            // for the search tab as well would add it twice and crash the creative menu.
+            .removeTab(CreativeModeTabs.SEARCH)
             .build()
             .register();
 
@@ -61,6 +66,7 @@ public class ModShells {
             .item("incomplete_nuke_shell", IncompleteNukeShellItem::new)
             .model((c, p) -> p.withExistingParent(c.getName(), p.modLoc("block/nuke_shell")))
             .lang("Incomplete Nuclear Shell")
+            .removeTab(CreativeModeTabs.SEARCH)
             .register();
 
     private static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> shell(MapColor color) {

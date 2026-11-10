@@ -1,7 +1,6 @@
 package com.greenmods.canonnukes;
 
-import com.greenmods.canonnukes.block.ModBlock;
-import com.greenmods.canonnukes.block.entity.ModBlockEntities;
+import com.greenmods.canonnukes.block.ModBlockEntities;
 import com.greenmods.canonnukes.commands.NukeCommand;
 import com.greenmods.canonnukes.item.ModItems;
 import com.greenmods.canonnukes.setup.CNTab;
@@ -16,27 +15,25 @@ import com.simibubi.create.foundation.item.TooltipModifier;
 
 import net.createmod.catnip.lang.FontHelper;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import org.slf4j.Logger;
 
-import rbasamoyai.createbigcannons.ModGroup;
-
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CanonNukes.MODID)
-public class CanonNukes
-{
+public class CanonNukes {
+
     public static final String MODID = "canonnukes";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
 
@@ -47,47 +44,35 @@ public class CanonNukes
         });
     }
 
-    public CanonNukes(FMLJavaModLoadingContext context)
-    {
-        IEventBus modEventBus = context.getModEventBus();
+    public CanonNukes(IEventBus modEventBus, ModContainer modContainer) {
+        // Register the creative tab of this mod
+        CNTab.register(modEventBus);
+
+        // CreateRegistrate has to know about the event bus
+        REGISTRATE.registerEventListeners(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::clientSetup);
+        NeoForge.EVENT_BUS.register(this);
 
-        MinecraftForge.EVENT_BUS.register(this);
-
-        CNTab.register(modEventBus);
-        ModBlock.register();
-        ModBlockEntities.register();
+        // Content of the mod
         ModShells.register();
+        ModBlockEntities.register();
         ModItems.register();
 
-        modEventBus.addListener(this::addCreative);
-        REGISTRATE.registerEventListeners(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Common setup init");
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-        if (event.getTabKey() == ModGroup.MAIN_TAB_KEY)
-            event.accept(ModShells.NUKE_SHELL.asItem());
+    private void clientSetup(final FMLClientSetupEvent event) {
+        LOGGER.info("HELLO FROM CLIENT SETUP");
     }
 
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
         NukeCommand.register(event.getDispatcher());
-    }
-
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-        }
     }
 }
