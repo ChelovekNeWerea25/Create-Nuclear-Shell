@@ -2,13 +2,13 @@ package com.greenmods.canonnukes;
 
 import com.greenmods.canonnukes.block.ModBlock;
 import com.greenmods.canonnukes.block.entity.ModBlockEntities;
-
-
 import com.greenmods.canonnukes.commands.NukeCommand;
 import com.greenmods.canonnukes.item.ModItems;
 import com.greenmods.canonnukes.setup.CNTab;
 import com.greenmods.canonnukes.shell.ModShells;
+
 import com.mojang.logging.LogUtils;
+
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -16,12 +16,10 @@ import com.simibubi.create.foundation.item.TooltipModifier;
 
 import net.createmod.catnip.lang.FontHelper;
 
-import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,7 +50,6 @@ public class CanonNukes
     public CanonNukes(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
         modEventBus.addListener(this::commonSetup);
 
@@ -71,7 +68,6 @@ public class CanonNukes
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         LOGGER.info("Common setup init");
-
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
@@ -80,12 +76,6 @@ public class CanonNukes
             event.accept(ModShells.NUKE_SHELL.asItem());
     }
 
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-
-        LOGGER.info("server starting init");
-    }
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
         NukeCommand.register(event.getDispatcher());
@@ -100,5 +90,4 @@ public class CanonNukes
             LOGGER.info("HELLO FROM CLIENT SETUP");
         }
     }
-
 }

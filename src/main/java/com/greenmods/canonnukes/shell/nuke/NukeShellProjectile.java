@@ -2,6 +2,7 @@ package com.greenmods.canonnukes.shell.nuke;
 
 import com.greenmods.canonnukes.shell.ModShells;
 import com.greenmods.canonnukes.world.explosion.NukeExplosion;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBigCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonCommonShellProperties;
@@ -22,6 +24,9 @@ import javax.annotation.Nonnull;
 
 public class NukeShellProjectile extends FuzedBigCannonProjectile {
 
+    /** Blast radius of a detonating nuclear shell. */
+    public static final float EXPLOSION_RADIUS = 35F;
+
     public NukeShellProjectile(EntityType<? extends NukeShellProjectile> type, Level level) {
         super(type, level);
     }
@@ -29,7 +34,7 @@ public class NukeShellProjectile extends FuzedBigCannonProjectile {
     @Override
     protected void detonate(Position position) {
         if (this.level() instanceof ServerLevel serverLevel) {
-            float radius = 35F;
+            float radius = EXPLOSION_RADIUS;
 
             NukeExplosion explosion = new NukeExplosion(
                     serverLevel,

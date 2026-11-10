@@ -17,12 +17,12 @@ Before support is discontinued, a few final minor versions will be released to p
 
 | Status | Feature | Description |
 | :---: | :--- | :--- |
-| 🟡 | **Final Polish** | Minor bug fixes and performance adjustments for the current build. |
-| 🟡 | **Minor Version Releases** | Final patch updates to fix critical issues and improve compatibility. |
+| ✅ | **v3.1.0** | Alex's Caves dependency removed, new crafting recipe, reworked detonation. |
+| ✅ | **v3.1.1** | Polish release: fixed tooltips, tag & datapack errors, explosion scheduling and clean-up of removed content. |
 | ❌ | **Multiple Warhead Types** | Canceled for this mod (Tactical nukes, dirty bombs, etc.). |
 | ❌ | **Configurable Yield** | Canceled for this mod (Adjust explosion power via config). |
 | ❌ | **New Crafting Chains** | Canceled for this mod (Uranium processing, bomb assembly). |
-| ❌ | **Independence** | Canceled for this mod (Removal of Alex's Caves dependency). |
+| ❌ | **Independence** | Canceled for this mod (Removal of Alex's Caves dependency — done in v3.1.0). |
 
 ---
 
@@ -35,7 +35,7 @@ Following the final minor releases, active development and support for **Create:
 ---
 
 ### 🚀 Successor Project
-All planned features, major overhauls, and future updates are being moved to a **new standalone successor project** built on **NeoForge** without the **Alex's Caves** dependency.
+All planned features, major overhauls, and future updates are being moved to **a new standalone successor project** built on **NeoForge** without the **Alex's Caves** dependency.
 
 > 🔗 **Check out the new project:** *[SOON]*
 
@@ -43,17 +43,18 @@ All planned features, major overhauls, and future updates are being moved to a *
 
 ## 🔍 About
 
-**Create: Nuclear Shell** is a high-impact expansion for **Create: Big Cannons** that introduces nuclear artillery capable of catastrophic destruction and lingering radiation effects. Perfect for end-game content or apocalyptic modpacks.
+**Create: Nuclear Shell** is a high-impact expansion for **Create: Big Cannons** that introduces nuclear artillery capable of catastrophic destruction. Perfect for end-game content or apocalyptic modpacks.
 
 ---
 
 ## ⚙️ Technical Details
 
-| Category         | Details                           |
-|------------------|-----------------------------------|
-| **MC Version**   | 1.20.1                            |
-| **Dependencies** | Create: Big Cannons, Alex's Caves |
-| **License**      | MIT                               |
+| Category         | Details                                                        |
+|------------------|-----------------------------------------------------------------|
+| **MC Version**   | 1.20.1                                                          |
+| **Loader**       | Forge 47.x                                                      |
+| **Dependencies** | Create 6.0.6, Create: Big Cannons 5.9, Ritchie's Projectile Lib |
+| **License**      | MIT                                                             |
 
 ---
 
@@ -62,8 +63,11 @@ All planned features, major overhauls, and future updates are being moved to a *
 ### ✅ Current Features
 
 - 💣 Nuclear artillery shell with massive explosion radius
-- ☢️ Radiation zones that persist after detonation
-- 🌋 Secondary firestorms and environmental damage
+- ☢️ Radiation, poison and blinding for everyone caught in the blast
+- 🌋 Devastating mushroom cloud with fire and screen shake
+- 🕳️ Crater that is dug progressively, block by block
+- 🧪 Sequenced assembly crafting recipe for the shell
+- ⌨️ `/nuke [radius]` command for testing (operator permission level 2)
 
 ---
 
@@ -74,13 +78,16 @@ We welcome community translations! Here's how to contribute:
 1. Copy this template and replace with your translations:
     ```json
     {
+      "itemGroup.canonnukes": "Create: Nuclear Shell",
       "block.canonnukes.nuke_shell": "Nuclear Shell",
-      "block.createnukecannon.nuke_shell.tooltip.behaviour2": "Unleashes a powerful nuclear blast, devastating the immediate area in an inferno and irradiating the surrounding environment.",
-      "block.createnukecannon.nuke_shell.tooltip.condition2": "On Detonation",
-      "block.createnukecannon.nuke_shell.tooltip.behaviour1": "§cA §cfuse §cis §c§l_required_ §cfor §cdetonation - §cit will §c§l_NOT_ §cexplode §con §cits §cown.",
-      "block.createnukecannon.nuke_shell.tooltip.condition1": "§cImportant",
-      "block.createnukecannon.nuke_shell.tooltip.summary": "\"Now, I am become _Death_, the destroyer of worlds.\"",
-      "entity.canonnukes.nuke_shell": "Nuclear Shell"
+      "block.canonnukes.nuke_shell.tooltip.summary": "\"Now, I am become _Death_, the destroyer of worlds.\"",
+      "block.canonnukes.nuke_shell.tooltip.condition1": "§cImportant",
+      "block.canonnukes.nuke_shell.tooltip.behaviour1": "§cA §cfuse §cis §c§l_required_ §cfor §cdetonation - §cit will §c§l_NOT_ §cexplode §con §cits §cown.",
+      "block.canonnukes.nuke_shell.tooltip.condition2": "On Detonation",
+      "block.canonnukes.nuke_shell.tooltip.behaviour2": "Unleashes a powerful nuclear blast, devastating the immediate area in an inferno and irradiating the surrounding environment.",
+      "entity.canonnukes.nuke_shell_projectile": "Nuclear Shell",
+      "item.canonnukes.incomplete_nuke_shell": "Incomplete Nuclear Shell",
+      "commands.canonnukes.nuke.success": "[!] Nuclear blast executed (radius: %s)"
     }
     ```
 
@@ -91,6 +98,7 @@ We welcome community translations! Here's how to contribute:
 ### ✅ Supported Languages
 
 - ✅ English
+- ✅ German
 - ✅ Russian
 - ✅ Ukrainian
 - ✅ Chinese
@@ -100,7 +108,17 @@ We welcome community translations! Here's how to contribute:
 
 ## 📜 Changelog
 
-### v3.1.0 *(Target for Porting)*
+### v3.1.1
+
+- 🐛 Fixed the nuclear shell tooltip (it used the translation keys of the old mod id).
+- 🐛 Fixed the `ritchiesprojectilelib:precise_motion` tag, it pointed to a block instead of the projectile entity.
+- 🐛 Removed invalid `munition_properties` files that referenced a non existing entity type.
+- 🐛 The crater is now really dug over multiple ticks instead of instantly, the mushroom cloud animation works as intended.
+- 🐛 Fluids, bedrock and other unbreakable blocks are no longer deleted by the blast, neighbouring blocks update correctly.
+- 🐛 The `/nuke` command no longer sends a broken message and its radius is limited to a safe value.
+- 🧹 Removed leftovers of the canceled reactor / uranium features (blocks, models, textures and worldgen data).
+
+### v3.1.0
 
 - 🔗 **Removed Alex's Caves dependency** — the mod is now standalone relative to Alex's Caves.
 - 🛠️ Changed crafting recipe for the nuclear shell.

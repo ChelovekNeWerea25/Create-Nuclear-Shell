@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "canonnukes:block/uran_ore"
-  }
-}

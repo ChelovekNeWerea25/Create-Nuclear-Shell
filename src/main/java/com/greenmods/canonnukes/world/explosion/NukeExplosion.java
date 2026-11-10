@@ -1,11 +1,19 @@
 package com.greenmods.canonnukes.world.explosion;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
+import com.greenmods.canonnukes.util.TickScheduler;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -19,11 +27,23 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class NukeExplosion extends Explosion {
+
+    /**
+     * Upper limit for the radius of the destroyed area. Keeps the amount of affected blocks
+     * (and therefore the tick time) within reasonable bounds, even for huge blast radii.
+     */
+    public static final float MAX_DESTRUCTION_RADIUS = 64F;
+
+    /** Upper limit for the radius in which entities are damaged. */
+    public static final float MAX_EFFECT_RADIUS = 160F;
+
+    /** Ticks between two steps of the progressive block removal. */
+    private static final int REMOVAL_STEP_INTERVAL = 2;
+
+    /** Amount of steps the block removal is spread over. */
+    private static final int REMOVAL_STEPS = 40;
 
     private final Level level;
     private final double x, y, z;
@@ -34,7 +54,7 @@ public class NukeExplosion extends Explosion {
 
     public NukeExplosion(Level level,
                          @Nullable Entity source,
-                         @Nullable net.minecraft.world.damagesource.DamageSource damageSource,
+                         @Nullable DamageSource damageSource,
                          @Nullable ExplosionDamageCalculator damageCalculator,
                          double x, double y, double z,
                          float radius,
@@ -51,51 +71,83 @@ public class NukeExplosion extends Explosion {
 
     @Override
     public void explode() {
+        collectDestroyedBlocks();
+        damageEntities();
+    }
 
-        if (this.interactsWithBlocks()) {
-            int r = Math.round(this.radius);
-            float radiusSq = this.radius * this.radius;
-            BlockPos center = BlockPos.containing(this.x, this.y, this.z);
-
-            List<BlockPos> temp = new ArrayList<>();
-
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dy = -r; dy <= r; dy++) {
-                    for (int dz = -r; dz <= r; dz++) {
-                        double distSq = dx * dx + dy * dy + dz * dz;
-
-                        if (distSq > radiusSq) continue;
-
-                        double dist = Math.sqrt(distSq);
-                        double edgeFactor = dist / this.radius;
-
-                        double noise = (this.level.random.nextDouble() - 0.5) * 0.35;
-                        double effectiveRadius = this.radius * (1.0 + noise * edgeFactor);
-
-                        if (dist > effectiveRadius) continue;
-
-                        BlockPos pos = center.offset(dx, dy, dz);
-                        if (!this.level.isInWorldBounds(pos)) continue;
-
-                        BlockState state = this.level.getBlockState(pos);
-                        if (state.isAir() || state.getBlock() == Blocks.BEDROCK) continue;
-
-                        temp.add(pos);
-                    }
-                }
-            }
-
-            temp.sort((a, b) -> {
-                double da = a.distToCenterSqr(this.x, this.y, this.z);
-                double db = b.distToCenterSqr(this.x, this.y, this.z);
-                return Double.compare(db, da);
-            });
-
-            this.sortedBlocks.addAll(temp);
-            this.getToBlow().addAll(temp);
+    /**
+     * Gathers every block that is going to be destroyed and sorts it by distance, so the crater
+     * can be dug from the centre outwards.
+     */
+    private void collectDestroyedBlocks() {
+        if (!this.interactsWithBlocks()) {
+            return;
         }
 
-        float effectRadius = this.radius * 2.5F;
+        float destructionRadius = Math.min(this.radius, MAX_DESTRUCTION_RADIUS);
+        int r = Math.round(destructionRadius);
+        float radiusSq = destructionRadius * destructionRadius;
+        BlockPos center = BlockPos.containing(this.x, this.y, this.z);
+
+        List<BlockPos> blocks = new ArrayList<>();
+
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dy = -r; dy <= r; dy++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    double distSq = dx * dx + dy * dy + dz * dz;
+
+                    if (distSq > radiusSq) continue;
+
+                    double dist = Math.sqrt(distSq);
+                    double edgeFactor = dist / destructionRadius;
+
+                    double noise = (this.level.random.nextDouble() - 0.5) * 0.35;
+                    double effectiveRadius = destructionRadius * (1.0 + noise * edgeFactor);
+
+                    if (dist > effectiveRadius) continue;
+
+                    BlockPos pos = center.offset(dx, dy, dz);
+                    if (!this.level.isInWorldBounds(pos)) continue;
+
+                    if (!isDestructible(this.level.getBlockState(pos))) continue;
+
+                    blocks.add(pos);
+                }
+            }
+        }
+
+        blocks.sort((a, b) -> {
+            double da = a.distToCenterSqr(this.x, this.y, this.z);
+            double db = b.distToCenterSqr(this.x, this.y, this.z);
+            return Double.compare(db, da);
+        });
+
+        this.sortedBlocks.addAll(blocks);
+        this.getToBlow().addAll(blocks);
+    }
+
+    /**
+     * Blocks that should survive a nuclear blast.
+     */
+    private static boolean isDestructible(BlockState state) {
+        if (state.isAir()) return false;
+        if (!state.getFluidState().isEmpty()) return false;
+
+        Block block = state.getBlock();
+
+        return block != Blocks.BEDROCK
+                && block != Blocks.BARRIER
+                && block != Blocks.END_PORTAL_FRAME
+                && block != Blocks.END_PORTAL
+                && block != Blocks.NETHER_PORTAL
+                && block != Blocks.LIGHT;
+    }
+
+    /**
+     * Damages, throws and irradiates every entity within the blast.
+     */
+    private void damageEntities() {
+        float effectRadius = Math.min(this.radius * 2.5F, MAX_EFFECT_RADIUS);
         float effectRadiusSq = effectRadius * effectRadius;
 
         AABB box = new AABB(
@@ -105,6 +157,7 @@ public class NukeExplosion extends Explosion {
 
         List<Entity> entities = this.level.getEntities(this.getIndirectSourceEntity(), box);
         Vec3 centerVec = new Vec3(this.x, this.y, this.z);
+        DamageSource damageSource = this.getDamageSource();
 
         for (Entity entity : entities) {
             if (entity.ignoreExplosion()) continue;
@@ -122,7 +175,7 @@ public class NukeExplosion extends Explosion {
             double factor = Math.max(0.0, 1.0 - (dist / effectRadius));
 
             float damage = (float) (factor * factor * 180.0F + 25.0F);
-            entity.hurt(this.getDamageSource(), damage);
+            entity.hurt(damageSource, damage);
 
             double pushForce = factor * 6.8D;
             Vec3 impulse = new Vec3(dirX * pushForce, (dirY * pushForce) + 1.2D, dirZ * pushForce);
@@ -176,51 +229,49 @@ public class NukeExplosion extends Explosion {
                 final int delay = i * 2;
                 final float force = intensity * (1.0f - i * 0.1f);
 
-                level.getServer().tell(new net.minecraft.server.TickTask(
-                        level.getServer().getTickCount() + delay,
-                        () -> {
-                            if (!player.isAlive() || player.isSpectator()) return;
+                TickScheduler.schedule(serverLevel.getServer(), delay, () -> {
+                    if (!player.isAlive() || player.isSpectator()) return;
 
-                            Vec3 shake = new Vec3(
-                                    (level.random.nextDouble() - 0.5) * force * 1.5,
-                                    force * 0.3,
-                                    (level.random.nextDouble() - 0.5) * force * 1.5
-                            );
-                            player.setDeltaMovement(player.getDeltaMovement().add(shake));
-                            player.hurtMarked = true;
-                        }
-                ));
+                    Vec3 shake = new Vec3(
+                            (serverLevel.random.nextDouble() - 0.5) * force * 1.5,
+                            force * 0.3,
+                            (serverLevel.random.nextDouble() - 0.5) * force * 1.5
+                    );
+                    player.setDeltaMovement(player.getDeltaMovement().add(shake));
+                    player.hurtMarked = true;
+                });
             }
         }
     }
 
+    /**
+     * Removes the collected blocks step by step, so the crater appears over time instead of
+     * popping into existence in a single tick.
+     */
     private void progressiveBlockRemoval(ServerLevel level) {
         if (sortedBlocks.isEmpty()) return;
 
         int total = sortedBlocks.size();
-        int perStep = Math.max(40, total / 35);
+        int perStep = Math.max(40, total / REMOVAL_STEPS);
 
-        for (int step = 0; step < 40; step++) {
+        for (int step = 0; step < REMOVAL_STEPS; step++) {
             final int currentStep = step;
 
-            level.getServer().tell(new net.minecraft.server.TickTask(
-                    level.getServer().getTickCount() + step * 2,
-                    () -> {
-                        int start = currentStep * perStep;
-                        int end = Math.min(start + perStep, total);
+            TickScheduler.schedule(level.getServer(), currentStep * REMOVAL_STEP_INTERVAL, () -> {
+                int start = currentStep * perStep;
+                int end = Math.min(start + perStep, total);
 
-                        for (int i = start; i < end; i++) {
-                            BlockPos pos = sortedBlocks.get(i);
-                            level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                for (int i = start; i < end; i++) {
+                    BlockPos pos = sortedBlocks.get(i);
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 
-                            if (this.fire && level.random.nextInt(7) == 0) {
-                                if (level.getBlockState(pos.below()).isSolidRender(level, pos.below())) {
-                                    level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-                                }
-                            }
+                    if (this.fire && level.random.nextInt(7) == 0) {
+                        if (level.getBlockState(pos.below()).isSolidRender(level, pos.below())) {
+                            level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
                         }
                     }
-            ));
+                }
+            });
         }
     }
 
@@ -238,15 +289,15 @@ public class NukeExplosion extends Explosion {
         level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, cx, cy + 2.5, cz, 22, fireballR * 0.6, fireballR * 0.4, fireballR * 0.6, 0);
 
         level.sendParticles(ParticleTypes.FLAME, cx, cy + 2.2, cz,
-                (int)(450 + r * 30), fireballR, fireballR * 0.75, fireballR, 0.42);
+                (int) (450 + r * 30), fireballR, fireballR * 0.75, fireballR, 0.42);
 
         level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, cx, cy + 2.8, cz,
-                (int)(160 + r * 12), fireballR * 0.75, fireballR * 0.45, fireballR * 0.75, 0.18);
+                (int) (160 + r * 12), fireballR * 0.75, fireballR * 0.45, fireballR * 0.75, 0.18);
 
         level.sendParticles(ParticleTypes.END_ROD, cx, cy + 3.5, cz,
-                (int)(160 + r * 16), fireballR * 1.1, fireballR * 0.65, fireballR * 1.1, 0.28);
+                (int) (160 + r * 16), fireballR * 1.1, fireballR * 0.65, fireballR * 1.1, 0.28);
 
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 3, () -> {
+        TickScheduler.schedule(level.getServer(), 3, () -> {
             for (int ring = 1; ring <= 9; ring++) {
                 double radius = fireballR * 1.45 * ring;
                 int points = 64 + ring * 18;
@@ -256,10 +307,8 @@ public class NukeExplosion extends Explosion {
                     double px = cx + Math.cos(angle) * radius;
                     double pz = cz + Math.sin(angle) * radius;
 
-
                     level.sendParticles(ParticleTypes.CLOUD, px, cy + 1.7, pz, 5, 0.55, 0.4, 0.55, 0.018);
                     level.sendParticles(ParticleTypes.SMOKE, px, cy + 1.4, pz, 4, 0.4, 0.25, 0.4, 0.012);
-
 
                     if (ring % 2 == 0) {
                         level.sendParticles(ParticleTypes.LARGE_SMOKE, px, cy + 1.9, pz, 3, 0.45, 0.3, 0.45, 0.01);
@@ -272,9 +321,9 @@ public class NukeExplosion extends Explosion {
 
             level.sendParticles(ParticleTypes.POOF, cx, cy + 1.2, cz, 90, r * 0.9, 2.0, r * 0.9, 0.1);
             level.sendParticles(ParticleTypes.CLOUD, cx, cy + 1.5, cz, 70, r * 0.7, 1.8, r * 0.7, 0.08);
-        }));
+        });
 
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 9, () -> {
+        TickScheduler.schedule(level.getServer(), 9, () -> {
             int steps = (int) (stemHeight / 1.15);
 
             for (int i = 0; i < steps; i++) {
@@ -292,21 +341,21 @@ public class NukeExplosion extends Explosion {
                             cx, cy + h, cz, 5, width * 0.35, 0.25, width * 0.35, 0.04);
                 }
             }
-        }));
+        });
 
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 22, () -> {
+        TickScheduler.schedule(level.getServer(), 22, () -> {
             double capY = cy + stemHeight;
 
             level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    cx, capY, cz, (int)(190 + r * 20), capRadius, 4.5, capRadius, 0.028);
+                    cx, capY, cz, (int) (190 + r * 20), capRadius, 4.5, capRadius, 0.028);
 
             level.sendParticles(ParticleTypes.CLOUD,
-                    cx, capY + 1.2, cz, (int)(120 + r * 14), capRadius * 1.0, 3.5, capRadius * 1.0, 0.022);
+                    cx, capY + 1.2, cz, (int) (120 + r * 14), capRadius * 1.0, 3.5, capRadius * 1.0, 0.022);
 
             level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
-                    cx, capY, cz, (int)(90 + r * 10), capRadius * 0.5, 2.8, capRadius * 0.5, 0.02);
+                    cx, capY, cz, (int) (90 + r * 10), capRadius * 0.5, 2.8, capRadius * 0.5, 0.02);
 
-            int ringPoints = (int)(70 + r * 5);
+            int ringPoints = (int) (70 + r * 5);
             for (int i = 0; i < ringPoints; i++) {
                 double angle = (i / (double) ringPoints) * Math.PI * 2.0;
                 double rx = Math.cos(angle) * capRadius * 0.95;
@@ -321,22 +370,22 @@ public class NukeExplosion extends Explosion {
 
             level.sendParticles(ParticleTypes.END_ROD, cx, capY + 2.2, cz, 70, 4.0, 2.5, 4.0, 0.1);
             level.sendParticles(ParticleTypes.FLASH, cx, capY + 1.8, cz, 4, 0, 0, 0, 0);
-        }));
+        });
 
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 45, () -> {
+        TickScheduler.schedule(level.getServer(), 45, () -> {
             double capY = cy + stemHeight;
 
             level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    cx, capY - 6, cz, (int)(220 + r * 18), capRadius * 1.7, 6.5, capRadius * 1.7, 0.035);
+                    cx, capY - 6, cz, (int) (220 + r * 18), capRadius * 1.7, 6.5, capRadius * 1.7, 0.035);
 
             level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    cx, cy + 3, cz, (int)(140 + r * 14), r * 1.6, 4.0, r * 1.6, 0.03);
+                    cx, cy + 3, cz, (int) (140 + r * 14), r * 1.6, 4.0, r * 1.6, 0.03);
 
             level.sendParticles(ParticleTypes.END_ROD,
                     cx, capY + 1, cz, 90, capRadius * 1.0, 5.5, capRadius * 1.0, 0.05);
 
             level.sendParticles(ParticleTypes.ASH,
                     cx, cy + 5, cz, 100, r * 1.4, 5.0, r * 1.4, 0.025);
-        }));
+        });
     }
 }

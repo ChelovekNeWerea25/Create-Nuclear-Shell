@@ -2,19 +2,15 @@ package com.greenmods.canonnukes.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = "canonnukes", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
 
-    public static void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onClientSetup);
-    }
-
     @OnlyIn(Dist.CLIENT)
-    private static void onClientSetup(FMLClientSetupEvent event) {
-
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
     }
 }

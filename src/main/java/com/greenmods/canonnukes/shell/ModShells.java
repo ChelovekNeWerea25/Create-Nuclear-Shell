@@ -1,24 +1,26 @@
 package com.greenmods.canonnukes.shell;
 
 import com.greenmods.canonnukes.CanonNukes;
+import com.greenmods.canonnukes.item.IncompleteNukeShellItem;
 import com.greenmods.canonnukes.shell.nuke.NukeShellBlock;
 import com.greenmods.canonnukes.shell.nuke.NukeShellProjectile;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
+
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.item.ItemDescription;
+
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
+
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
+
 import rbasamoyai.createbigcannons.CBCTags;
 import rbasamoyai.createbigcannons.datagen.assets.CBCBuilderTransformers;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
@@ -44,14 +46,22 @@ public class ModShells {
             .transform(CBCBuilderTransformers.projectile("projectile/nuke_shell"))
             .transform(CBCBuilderTransformers.safeNbt())
             .loot(CBCBuilderTransformers.shellLoot())
-            .onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.createnukecannon.nuke_shell"))
             .lang("Nuclear Shell")
             .item(FuzedProjectileBlockItem::new)
             .transform(CBCBuilderTransformers.fuzedProjectileItem("projectile/nuke_shell"))
             .tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
             .build()
             .register();
-    public static final EntityEntry<NukeShellProjectile> NUKE_SHELL_PROJECTILE = cannonProjectile("nuke_shell_projectile", NukeShellProjectile::new, "Nuclear Shell", CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE);
+
+    public static final EntityEntry<NukeShellProjectile> NUKE_SHELL_PROJECTILE = cannonProjectile(
+            "nuke_shell_projectile", NukeShellProjectile::new, "Nuclear Shell",
+            CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE);
+
+    public static final ItemEntry<IncompleteNukeShellItem> INCOMPLETE_NUKE_SHELL = REGISTRATE
+            .item("incomplete_nuke_shell", IncompleteNukeShellItem::new)
+            .model((c, p) -> p.withExistingParent(c.getName(), p.modLoc("block/nuke_shell")))
+            .lang("Incomplete Nuclear Shell")
+            .register();
 
     private static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> shell(MapColor color) {
         return b -> b.addLayer(() -> RenderType::solid)
@@ -59,6 +69,7 @@ public class ModShells {
                 .properties(p -> p.strength(2.0f, 3.0f))
                 .properties(p -> p.sound(SoundType.STONE));
     }
+
     private static <T extends AbstractBigCannonProjectile> EntityEntry<T>
     cannonProjectile(String id, EntityType.EntityFactory<T> factory, PropertiesTypeHandler<EntityType<?>, ?> handler) {
         return REGISTRATE
@@ -69,6 +80,7 @@ public class ModShells {
                 .onRegister(type -> MunitionPropertiesHandler.registerProjectileHandler(type, handler))
                 .register();
     }
+
     private static <T extends AbstractBigCannonProjectile> EntityEntry<T>
     cannonProjectile(String id, EntityType.EntityFactory<T> factory, String enUSdiffLang, PropertiesTypeHandler<EntityType<?>, ?> handler) {
         return REGISTRATE
@@ -80,9 +92,11 @@ public class ModShells {
                 .onRegister(type -> MunitionPropertiesHandler.registerProjectileHandler(type, handler))
                 .register();
     }
+
     private static <T> NonNullConsumer<T> configure(Consumer<EntityTypeConfigurator> cons) {
         return b -> cons.accept(EntityTypeConfigurator.of(b));
     }
+
     private static <T> NonNullConsumer<T> cannonProperties() {
         return configure(c -> c.size(0.8f, 0.8f)
                 .fireImmune()
@@ -90,11 +104,7 @@ public class ModShells {
                 .updateVelocity(false)
                 .trackingRange(16));
     }
-    public static final ItemEntry<SequencedAssemblyItem> INCOMPLETE_NUKE_SHELL = REGISTRATE
-            .item("incomplete_nuke_shell", SequencedAssemblyItem::new)
-            .model((c, p) -> p.withExistingParent(c.getName(), p.modLoc("block/nuke_shell")))
-            .lang("Incomplete Nuclear Shell")
-            .register();
+
     public static void register() {
     }
 }

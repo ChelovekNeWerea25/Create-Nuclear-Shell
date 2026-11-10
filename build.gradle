@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.2-beta'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
 version = mod_version
@@ -40,6 +40,12 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            // Create & Big Cannons ship mixins that are compiled against the SRG names, they have to be
+            // remapped for every run configuration (client, server and data), otherwise the mixins fail
+            // to apply and the game crashes while bootstrapping.
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+
             mods {
                 "${mod_id}" {
                     source sourceSets.main
@@ -50,9 +56,6 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
-
-            property("mixin.env.remapRefMap", "true")
-            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
         }
 
         server {
