@@ -7,6 +7,7 @@ import com.greenmods.canonnukes.Config;
 import com.greenmods.canonnukes.util.TickScheduler;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -140,7 +141,7 @@ public class NukeExplosion extends Explosion {
         blocks.sort((a, b) -> {
             double da = a.distToCenterSqr(this.x, this.y, this.z);
             double db = b.distToCenterSqr(this.x, this.y, this.z);
-            return Double.compare(db, da);
+            return Double.compare(da, db);
         });
 
         this.sortedBlocks.addAll(blocks);
@@ -316,6 +317,19 @@ public class NukeExplosion extends Explosion {
         }
     }
 
+    /**
+     * Sends particles to every player, no matter how far away they are. The mushroom cloud is
+     * over a hundred blocks high, with the default range it would only be visible for the
+     * players that are right next to the crater.
+     */
+    private static void sendCloudParticles(ServerLevel level, ParticleOptions type,
+                                           double x, double y, double z, int count,
+                                           double xDist, double yDist, double zDist, double speed) {
+        for (ServerPlayer player : level.players()) {
+            level.sendParticles(player, type, true, x, y, z, count, xDist, yDist, zDist, speed);
+        }
+    }
+
     private void spawnMushroomCloud(ServerLevel level) {
         final double cx = this.x;
         final double cy = this.y;
@@ -340,23 +354,25 @@ public class NukeExplosion extends Explosion {
                 (int) (160 + r * 16), fireballR * 1.1, fireballR * 0.65, fireballR * 1.1, 0.28);
 
         TickScheduler.schedule(level.getServer(), 3, () -> {
+            // the stem: a rising column of smoke, every ring is a bit higher and a bit wider
             for (int ring = 1; ring <= 9; ring++) {
-                double radius = fireballR * 1.45 * ring;
+                double ringHeight = cy + (stemHeight / 9.0) * ring;
+                double ringRadius = fireballR * (0.45 + ring * 0.13);
                 int points = 64 + ring * 18;
 
                 for (int i = 0; i < points; i++) {
                     double angle = (i / (double) points) * Math.PI * 2.0;
-                    double px = cx + Math.cos(angle) * radius;
-                    double pz = cz + Math.sin(angle) * radius;
+                    double px = cx + Math.cos(angle) * ringRadius;
+                    double pz = cz + Math.sin(angle) * ringRadius;
 
-                    level.sendParticles(ParticleTypes.CLOUD, px, cy + 1.7, pz, 5, 0.55, 0.4, 0.55, 0.018);
-                    level.sendParticles(ParticleTypes.SMOKE, px, cy + 1.4, pz, 4, 0.4, 0.25, 0.4, 0.012);
+                    sendCloudParticles(level, ParticleTypes.CLOUD, px, ringHeight, pz, 5, 0.55, 0.4, 0.55, 0.015);
+                    sendCloudParticles(level, ParticleTypes.SMOKE, px, ringHeight - 0.3, pz, 4, 0.4, 0.25, 0.4, 0.015);
 
                     if (ring % 2 == 0) {
-                        level.sendParticles(ParticleTypes.LARGE_SMOKE, px, cy + 1.9, pz, 3, 0.45, 0.3, 0.45, 0.01);
+                        sendCloudParticles(level, ParticleTypes.LARGE_SMOKE, px, ringHeight + 0.2, pz, 3, 0.45, 0.3, 0.45, 0.015);
                     }
                     if (ring % 3 == 0) {
-                        level.sendParticles(ParticleTypes.POOF, px, cy + 1.5, pz, 2, 0.35, 0.2, 0.35, 0.015);
+                        sendCloudParticles(level, ParticleTypes.POOF, px, ringHeight - 0.2, pz, 2, 0.35, 0.2, 0.35, 0.015);
                     }
                 }
             }
@@ -372,29 +388,28 @@ public class NukeExplosion extends Explosion {
                 double h = i * 1.15;
                 double width = 2.1 + i * 0.13;
 
-                level.sendParticles(ParticleTypes.LARGE_SMOKE,
+                sendCloudParticles(level, ParticleTypes.LARGE_SMOKE,
                         cx, cy + h, cz, 28, width, 0.55, width, 0.016);
 
-                level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
+                sendCloudParticles(level, ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
                         cx, cy + h, cz, 18, width * 0.65, 0.4, width * 0.65, 0.012);
 
                 if (i % 2 == 0) {
-                    level.sendParticles(ParticleTypes.END_ROD,
+                    sendCloudParticles(level, ParticleTypes.END_ROD,
                             cx, cy + h, cz, 5, width * 0.35, 0.25, width * 0.35, 0.04);
                 }
             }
         });
-
         TickScheduler.schedule(level.getServer(), 22, () -> {
             double capY = cy + stemHeight;
 
-            level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+            sendCloudParticles(level, ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     cx, capY, cz, (int) (190 + r * 20), capRadius, 4.5, capRadius, 0.028);
 
-            level.sendParticles(ParticleTypes.CLOUD,
+            sendCloudParticles(level, ParticleTypes.CLOUD,
                     cx, capY + 1.2, cz, (int) (120 + r * 14), capRadius * 1.0, 3.5, capRadius * 1.0, 0.022);
 
-            level.sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
+            sendCloudParticles(level, ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
                     cx, capY, cz, (int) (90 + r * 10), capRadius * 0.5, 2.8, capRadius * 0.5, 0.02);
 
             int ringPoints = (int) (70 + r * 5);
@@ -403,10 +418,10 @@ public class NukeExplosion extends Explosion {
                 double rx = Math.cos(angle) * capRadius * 0.95;
                 double rz = Math.sin(angle) * capRadius * 0.95;
 
-                level.sendParticles(ParticleTypes.CLOUD,
+                sendCloudParticles(level, ParticleTypes.CLOUD,
                         cx + rx, capY + 2.5, cz + rz, 10, 2.3, 1.6, 2.3, 0.02);
 
-                level.sendParticles(ParticleTypes.END_ROD,
+                sendCloudParticles(level, ParticleTypes.END_ROD,
                         cx + rx, capY + 2.8, cz + rz, 4, 1.4, 1.0, 1.4, 0.05);
             }
 
@@ -417,16 +432,16 @@ public class NukeExplosion extends Explosion {
         TickScheduler.schedule(level.getServer(), 45, () -> {
             double capY = cy + stemHeight;
 
-            level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+            sendCloudParticles(level, ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     cx, capY - 6, cz, (int) (220 + r * 18), capRadius * 1.7, 6.5, capRadius * 1.7, 0.035);
 
-            level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+            sendCloudParticles(level, ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     cx, cy + 3, cz, (int) (140 + r * 14), r * 1.6, 4.0, r * 1.6, 0.03);
 
-            level.sendParticles(ParticleTypes.END_ROD,
+            sendCloudParticles(level, ParticleTypes.END_ROD,
                     cx, capY + 1, cz, 90, capRadius * 1.0, 5.5, capRadius * 1.0, 0.05);
 
-            level.sendParticles(ParticleTypes.ASH,
+            sendCloudParticles(level, ParticleTypes.ASH,
                     cx, cy + 5, cz, 100, r * 1.4, 5.0, r * 1.4, 0.025);
         });
     }

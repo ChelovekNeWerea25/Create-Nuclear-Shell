@@ -1,0 +1,71 @@
+<h2>☢️ Create: Nuclear Shell — NeoForge Edition</h2>
+
+<p><strong>Nuclear artillery for Create: Big Cannons on Minecraft 1.21.1 / NeoForge.</strong><br>
+One shell. One crater. Everything else is scenery.</p>
+
+<p><img src="https://media.forgecdn.net/attachments/000/000/000/01-mushroom-cloud.png" alt="mushroom cloud" width="100%" /></p>
+
+<hr>
+
+<h3>💥 What is it?</h3>
+<p>A high-impact expansion for Create: Big Cannons that adds a craftable <strong>Nuclear Shell</strong>:
+a single-use artillery round that turns the impact zone into a glowing, irradiated crater and
+leaves a mushroom cloud hanging over the battlefield.</p>
+<p>This is the <strong>NeoForge edition</strong> of Create: Nuclear Shell. It replaces the archived
+Forge 1.20.1 version and &mdash; unlike it &mdash; does <strong>not</strong> depend on Alex's Caves anymore.</p>
+
+<h3>✨ Features</h3>
+<ul>
+<li><strong>💣 Nuclear artillery shell</strong> with a massive blast radius (35 blocks by default)</li>
+<li><strong>☢️ Radiation, poison and blindness</strong> for everything caught in the blast</li>
+<li><strong>🌋 Mushroom cloud</strong> that unfolds over several seconds and is visible from far away</li>
+<li><strong>🔥 Fire, knockback and screen shake</strong> for nearby players</li>
+<li><strong>🕳️ Progressive crater</strong> &mdash; the ground is dug block by block, from the centre outwards</li>
+<li><strong>🧪 Sequenced assembly recipe</strong> for the shell (5 steps, 4 loops)</li>
+<li><strong>⌨️ <code>/nuke [radius]</code></strong> command for testing (operator permission level 2)</li>
+<li><strong>⚙️ Fully configurable</strong> &mdash; blast radius, damage, radiation, crater speed, screen shake</li>
+</ul>
+
+<h3>📸 Screenshots</h3>
+<p><img src="https://media.forgecdn.net/attachments/000/000/000/02-detonation.png" alt="detonation" width="49%" />
+<img src="https://media.forgecdn.net/attachments/000/000/000/03-crater.png" alt="crater" width="49%" /></p>
+<p><img src="https://media.forgecdn.net/attachments/000/000/000/05-nuclear-shell.png" alt="nuclear shell" width="49%" />
+<img src="https://media.forgecdn.net/attachments/000/000/000/04-crater-closeup.png" alt="crater close up" width="49%" /></p>
+
+<h3>🧪 How to craft it</h3>
+<p>The shell is made in a <strong>Sequenced Assembler</strong>:</p>
+<p><code>Sturdy Sheet &rarr; Deploy TNT &rarr; Press &rarr; Deploy Precision Mechanism &rarr; Deploy Brass Sheet &rarr; Press</code></p>
+<p>Loop the sequence 4 times for an 85% chance of a finished shell.</p>
+
+<h3>⚙️ Configuration</h3>
+<p>The config file is <code>config/canonnukes-common.toml</code>:</p>
+<table>
+<thead><tr><th>Key</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>explosion.blastRadius</code></td><td>35.0</td><td>Blast radius of the shell in blocks</td></tr>
+<tr><td><code>explosion.damageMultiplier</code></td><td>1.0</td><td>Multiplier for the damage to entities</td></tr>
+<tr><td><code>explosion.destroyBlocks</code></td><td>true</td><td>Whether the blast digs a crater</td></tr>
+<tr><td><code>explosion.craterSteps</code></td><td>40</td><td>Steps the crater is dug over</td></tr>
+<tr><td><code>explosion.craterStepInterval</code></td><td>2</td><td>Ticks between two crater steps</td></tr>
+<tr><td><code>effects.radiation</code></td><td>true</td><td>Whether the blast irradiates entities</td></tr>
+<tr><td><code>effects.radiationDuration</code></td><td>800</td><td>Duration of the radiation (20 ticks = 1s)</td></tr>
+<tr><td><code>effects.screenShake</code></td><td>true</td><td>Whether the screen shakes</td></tr>
+<tr><td><code>effects.mushroomCloud</code></td><td>true</td><td>Whether the mushroom cloud is rendered</td></tr>
+</tbody>
+</table>
+
+<h3>📦 Requirements</h3>
+<ul>
+<li>Minecraft <strong>1.21.1</strong></li>
+<li><strong>NeoForge</strong> 21.1+</li>
+<li><strong>Create</strong> 6.0.10+</li>
+<li><strong>Create: Big Cannons</strong> 5.11+</li>
+<li><strong>Ritchie's Projectile Library</strong> 2.1+</li>
+</ul>
+
+<h3>🌍 Translations</h3>
+<p>English, German, Russian, Ukrainian and Chinese are included. More are welcome &mdash; copy
+<code>assets/canonnukes/lang/en_us.json</code>, translate the values and open a pull request.</p>
+
+<hr>
+<p><em>"Now I am become Death, the destroyer of worlds." &mdash; J. Robert Oppenheimer</em></p>

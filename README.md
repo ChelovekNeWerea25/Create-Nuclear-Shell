@@ -34,11 +34,22 @@ does **not** depend on Alex's Caves anymore.
 
 - 💣 Nuclear artillery shell with a massive explosion radius
 - ☢️ Radiation, poison and blinding for everyone caught in the blast
-- 🌋 Devastating mushroom cloud with fire and screen shake
-- 🕳️ Crater that is dug progressively, block by block
+- 🌋 Devastating mushroom cloud with fire and screen shake, visible from far away
+- 🕳️ Crater that is dug progressively, block by block, from the centre outwards
 - 🧪 Sequenced assembly crafting recipe for the shell
 - ⌨️ `/nuke [radius]` command for testing (operator permission level 2)
 - ⚙️ Configurable blast radius, damage, radiation, crater and screen shake
+
+## 📸 Screenshots
+
+| | |
+|---|---|
+| ![Mushroom cloud](docs/screenshots/01-mushroom-cloud.png) | ![Detonation](docs/screenshots/02-detonation.png) |
+| The mushroom cloud over the battlefield | The detonation |
+| ![Crater](docs/screenshots/03-crater.png) | ![Nuclear shell](docs/screenshots/05-nuclear-shell.png) |
+| The finished crater | The nuclear shell |
+
+More screenshots live in [`docs/screenshots`](docs/screenshots).
 
 ### ⚙️ Configuration
 
@@ -103,10 +114,22 @@ We welcome community translations! Here's how to contribute:
 - 🐛 Fixed the `ritchiesprojectilelib:precise_motion` tag, it pointed to a block instead of the projectile entity.
 - 🐛 Removed invalid `munition_properties` files that referenced a non existing entity type.
 - 🐛 The crater is now really dug over multiple ticks instead of instantly, the mushroom cloud animation works as intended.
+- 🐛 The crater is dug from the centre outwards now, before the rim collapsed inwards and left an island in the middle.
+- 🐛 The mushroom cloud is a rising column now and is sent to the players with a long distance, before it was a flat ring that was only visible within 32 blocks.
 - 🐛 Fluids, bedrock and other unbreakable blocks are no longer deleted by the blast, neighbouring blocks update correctly.
 - 🐛 The `/nuke` command no longer sends a broken message and its radius is limited to a safe value.
+- 🐛 Added the missing dependencies on Create: Big Cannons and Ritchie's Projectile Library.
 - ⚙️ Replaced the placeholder config with real options for blast radius, damage, radiation, crater and screen shake.
 - 🧹 Removed leftovers of the canceled reactor / uranium features (blocks, models, textures and worldgen data).
+
+### Release assets
+
+| File | Purpose |
+|------|---------|
+| [`docs/modrinth-description.md`](docs/modrinth-description.md) | Modrinth project description (Markdown) |
+| [`docs/curseforge-description.html`](docs/curseforge-description.html) | CurseForge project description (HTML) |
+| [`docs/version-3.1.1-changelog.txt`](docs/version-3.1.1-changelog.txt) | Release notes for the 3.1.1 version |
+| [`docs/screenshots`](docs/screenshots) | Screenshots in 1920×1153 |
 
 ### v3.1.0 (Forge 1.20.1, archived)
 

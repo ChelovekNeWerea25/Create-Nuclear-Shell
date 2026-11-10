@@ -1,0 +1,35 @@
+Create: Nuclear Shell 3.1.1 — NeoForge Edition
+
+The mod is ported to Minecraft 1.21.1 and NeoForge 21.1. It replaces the archived Forge 1.20.1
+version and does not depend on Alex's Caves anymore.
+
+Fixes:
+- Fixed the crash when opening the creative menu: the shell was registered for the search tab and
+  added to the tab of the mod as well, so it ended up in the tab twice.
+- Fixed the tooltip of the nuclear shell, it used the translation keys of the old mod id.
+- Fixed the ritchiesprojectilelib:precise_motion tag, it pointed to a block instead of the
+  projectile entity.
+- Removed invalid munition_properties files that referenced an entity type that does not exist.
+- Spread the crater and the mushroom cloud over several ticks, MinecraftServer#tell and #execute
+  run their tasks immediately.
+- The crater is now dug from the centre outwards, before it the rim collapsed inwards and a small
+  island was left in the middle.
+- The mushroom cloud is a rising column now, the smoke rings used to spread over 450 blocks and
+  looked like a flat ring instead of a cloud.
+- The mushroom cloud is sent to the players with a long distance, with the default range of 32
+  blocks it was only visible for players that were right next to the crater.
+- Fluids, bedrock and other unbreakable blocks are no longer deleted by the blast and the
+  neighbouring blocks update correctly.
+- The /nuke command no longer sends a broken message and its radius is limited to a safe value.
+- Added the missing dependencies on Create: Big Cannons and Ritchie's Projectile Library.
+- Fixed the pack format, the mod description and the group id.
+
+New:
+- Real configuration options for blast radius, damage multiplier, radiation, crater speed,
+  screen shake and the mushroom cloud (config/canonnukes-common.toml).
+- The incomplete nuclear shell is now used by the recipe and is shown in the creative tab.
+
+Clean up:
+- Removed the leftovers of the canceled reactor and uranium features (blocks, models, textures
+  and worldgen data).
+- Removed dead code, duplicate and unused imports.
